@@ -1,3 +1,7 @@
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QPainter, QPen, QColor
+import dialog
 from typing import List
 
 
@@ -39,9 +43,8 @@ def convert(string: str) -> List[Figure]:
 
     for obj in objects:
         if is_valid(obj):
-            figs.append(Figure(obj[0], obj[1], list(map(float,obj[2:]))))
+            figs.append(Figure(obj[0], obj[1], list(map(float, obj[2:]))))
         else:
-            print("false", obj)
             figs.clear()
             figs.append(Figure("error", "", []))
             break
@@ -49,20 +52,42 @@ def convert(string: str) -> List[Figure]:
     return figs
 
 
-def draw(figs: List[Figure]) -> None:
+def draw_a_rect(qp: QPainter, x1, x2, y1, y2):
+    qp.setPen(QPen(QColor(255, 0, 0), 2))
+    qp.drawRect(x1, x2, y1, y2)
+
+
+def draw(qp: QPainter, figs: List[Figure]) -> None:
     for figure in figs:
-        print(figure)
         if figure.type == "rectangle":
             pass
         elif figure.type == "polygon":
             pass
         elif figure.type == "error":
             pass
+    # test
+    draw_a_rect(qp, 20, 20, 100, 100)
+    draw_a_rect(qp, 180, 120, 50, 120)
+
+
+class MyWindow(QMainWindow, dialog.Ui_Dialog):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        figures_string = "rectangle,green,30.0,40.0,20.0,30.0\n" \
+                         "rectangle,red,60.0,90.0,40.0,70.0\n" \
+                         "polygon,black,10.0,20.0,30.0,40.0,80.0,20.0,10.0,20.0"
+        self.figures = convert(figures_string)
+
+    def paintEvent(self, a0) -> None:
+        qp = QPainter()
+        qp.begin(self)
+        draw(qp, self.figures)
+        qp.end()
 
 
 if __name__ == '__main__':
-    figures_string = "rectangle,green,30.0,40.0,20.0,30.0\n" \
-                    "rectangle,red,60.0,90.0,40.0,70.0\n" \
-                    "polygon,black,10.0,20.0,30.0,40.0,80.0,20.0,10.0,20.0"
-    figures = convert(figures_string)
-    draw(figures)
+    app = QApplication(sys.argv)
+    myWindow = MyWindow()
+    myWindow.show()
+    app.exec_()
