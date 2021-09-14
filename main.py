@@ -52,22 +52,21 @@ def convert(string: str) -> List[Figure]:
     return figs
 
 
-def draw_a_rect(qp: QPainter, x1, x2, y1, y2):
-    qp.setPen(QPen(QColor(255, 0, 0), 2))
-    qp.drawRect(x1, x2, y1, y2)
+def draw_rect(qp, color, coord):
+    qp.setPen(QPen(QColor(*color), 2))
+    qp.drawRect(*coord)
 
 
 def draw(qp: QPainter, figs: List[Figure]) -> None:
+    color_rgb = {'red': (255, 0, 0), 'green': (0, 0, 255), 'blue': (0, 0, 255)}
     for figure in figs:
         if figure.type == "rectangle":
-            pass
+            draw_rect(qp, color_rgb[figure.layer], figure.coordinates)
+        # TODO
         elif figure.type == "polygon":
             pass
         elif figure.type == "error":
             pass
-    # test
-    draw_a_rect(qp, 20, 20, 100, 100)
-    draw_a_rect(qp, 180, 120, 50, 120)
 
 
 class MyWindow(QMainWindow, dialog.Ui_Dialog):
