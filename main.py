@@ -1,7 +1,8 @@
 """
 TODO
 1. int 좌표만 가능한 QPainter 를 float 좌표도 가능한 matplotlib.patches 로 변경
-2. Design Pattern 적용 모듈화
+2. 에러 종류별 처리 및 표시
+3. Design Pattern 적용 모듈화
 """
 
 import sys
