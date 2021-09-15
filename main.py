@@ -74,7 +74,6 @@ def draw_rect(qp, color, coord):
 
 
 def draw_line(qp, color, coord):
-    print(coord)
     qp.setPen(QPen(QColor(*color), 2))
     qp.drawLine(*coord)
 
