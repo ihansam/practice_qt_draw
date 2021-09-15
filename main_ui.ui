@@ -32,7 +32,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QPlainTextEdit" name="plainTextEdit"/>
+      <widget class="QPlainTextEdit" name="plainTextEdit_input">
+       <property name="plainText">
+        <string>rectangle,green,30.0,40.0,20.0,30.0
+rectangle,red,60.0,90.0,40.0,70.0
+polygon,black,100.0,200.0,200.0,500.0,500.0,300.0,400.0,100.0,100.0,200.0</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer">
@@ -63,7 +69,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButton_show">
          <property name="text">
           <string>Show</string>
          </property>

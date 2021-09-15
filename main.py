@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPainter, QPen, QColor
-from PyQt5.QtCore import Qt
+import main_ui
 import dialog
 from typing import List
 
@@ -75,14 +75,12 @@ def draw(qp: QPainter, figs: List[Figure]) -> None:
             qp.drawText(300, 300, "Invalid Input")
 
 
-class MyWindow(QMainWindow, dialog.Ui_Dialog):
-    def __init__(self):
-        super().__init__()
+class SubWindow(QDialog, dialog.Ui_Dialog, QMainWindow):
+    def __init__(self, parent, input_txt):
+        super().__init__(parent)
+        self.show()
         self.setupUi(self)
-        figures_string = "rectangle,green,30.0,40.0,20.0,30.0\n" \
-                         "rectangle,red,60.0,90.0,40.0,70.0\n" \
-                         "polygon,black,100.0,200.0,300.0,400.0,500.0,200.0,100.0,200.0"
-        self.figures = convert(figures_string)
+        self.figures = convert(input_txt)
 
     def paintEvent(self, a0) -> None:
         qp = QPainter()
@@ -91,8 +89,20 @@ class MyWindow(QMainWindow, dialog.Ui_Dialog):
         qp.end()
 
 
+class MainWindow(QMainWindow, main_ui.Ui_MainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.pushButton_show.clicked.connect(self.open_dialog)
+
+    def open_dialog(self):
+        input_text = self.plainTextEdit_input.toPlainText()
+        SubWindow(self, input_text)
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    myWindow = MyWindow()
+    myWindow = MainWindow()
     myWindow.show()
     app.exec_()
