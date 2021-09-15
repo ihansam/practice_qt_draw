@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPainter, QPen, QColor
+from PyQt5.QtCore import Qt
 import dialog
 from typing import List
 
@@ -57,16 +58,21 @@ def draw_rect(qp, color, coord):
     qp.drawRect(*coord)
 
 
+def draw_line(qp, color, coord):
+    qp.setPen(QPen(QColor(*color), 2))
+    qp.drawLine(*coord)
+
+
 def draw(qp: QPainter, figs: List[Figure]) -> None:
-    color_rgb = {'red': (255, 0, 0), 'green': (0, 0, 255), 'blue': (0, 0, 255)}
+    color_rgb = {'red': (255, 0, 0), 'green': (0, 0, 255), 'blue': (0, 0, 255), 'black': (0, 0, 0)}
     for figure in figs:
         if figure.type == "rectangle":
             draw_rect(qp, color_rgb[figure.layer], figure.coordinates)
-        # TODO
         elif figure.type == "polygon":
-            pass
+            for i in range(0, len(figure.coordinates)-3, 2):
+                draw_line(qp, color_rgb[figure.layer], [figure.coordinates[i+j] for j in range(4)])
         elif figure.type == "error":
-            pass
+            qp.drawText(300, 300, "Invalid Input")
 
 
 class MyWindow(QMainWindow, dialog.Ui_Dialog):
@@ -75,7 +81,7 @@ class MyWindow(QMainWindow, dialog.Ui_Dialog):
         self.setupUi(self)
         figures_string = "rectangle,green,30.0,40.0,20.0,30.0\n" \
                          "rectangle,red,60.0,90.0,40.0,70.0\n" \
-                         "polygon,black,10.0,20.0,30.0,40.0,80.0,20.0,10.0,20.0"
+                         "polygon,black,100.0,200.0,300.0,400.0,500.0,200.0,100.0,200.0"
         self.figures = convert(figures_string)
 
     def paintEvent(self, a0) -> None:
