@@ -74,6 +74,7 @@ def draw_rect(qp, color, coord):
 
 
 def draw_line(qp, color, coord):
+    print(coord)
     qp.setPen(QPen(QColor(*color), 2))
     qp.drawLine(*coord)
 
@@ -84,7 +85,7 @@ def draw(qp: QPainter, figs: List[Figure]) -> None:
             draw_rect(qp, color_rgb[figure.color], figure.coordinates)
         elif figure.type == "polygon":
             for i in range(0, len(figure.coordinates)-3, 2):
-                draw_line(qp, color_rgb[figure.color], [figure.coordinates[i+j] for j in range(4)])
+                draw_line(qp, color_rgb[figure.color], figure.coordinates[i:i+4])
         elif figure.type == "error":
             qp.drawText(300, 300, "Invalid Input")
 
